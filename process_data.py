@@ -1,6 +1,6 @@
-'''
+"""
 Code for downloading and processing KITTI data (Geiger et al. 2013, http://www.cvlibs.net/datasets/kitti/)
-'''
+"""
 
 import os
 import numpy as np
@@ -10,12 +10,12 @@ from settings import *
 
 
 desired_image_size = (128, 160)
-#categories = ['in_plane', 'outside_plane']
+# categories = ['in_plane', 'outside_plane']
 categories = ['default']
 
 # Videos used for validation and testing.
-val_recordings = [('city', '2011_09_26_drive_0005_sync')]
-test_recordings = [('city', '2011_09_26_drive_0104_sync'), ('residential', '2011_09_26_drive_0079_sync'), ('road', '2011_09_26_drive_0070_sync')]
+val_recordings = [('default', '2011_09_26_drive_0048_sync')]
+test_recordings = [('default', '2011_09_26_drive_0002_sync')]
 
 if not os.path.exists(DATA_DIR):
     os.mkdir(DATA_DIR)
@@ -39,7 +39,8 @@ def process_data():
     for split in splits:
         image_list = []
         source_list = []
-        for category, video_id_dir in splits[split]:
+        for category, video_id in splits[split]:
+            video_id_dir = os.path.join(DATA_DIR, 'raw', category, video_id + '/')
             _, _, image_files = os.walk(video_id_dir).next()
             image_list += [video_id_dir + f for f in sorted(image_files)]
             source_list += [category + '-' + video_id_dir] * len(image_files)
