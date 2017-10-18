@@ -1,10 +1,9 @@
-'''
-Train PredNet on KITTI sequences. (Geiger et al. 2013, http://www.cvlibs.net/datasets/kitti/)
-'''
+"""
+Train PredNet on DATA_DIR data
+"""
 
 import os
 import numpy as np
-np.random.seed(123)
 from six.moves import cPickle
 
 from keras import backend as K
@@ -17,12 +16,13 @@ from keras.optimizers import Adam
 
 from prednet import PredNet
 from data_utils import SequenceGenerator
-from kitti_settings import *
+from settings import *
 
+np.random.seed(123)
 
 save_model = True  # if weights will be saved
-weights_file = os.path.join(WEIGHTS_DIR, 'prednet_kitti_weights.hdf5')  # where weights will be saved
-json_file = os.path.join(WEIGHTS_DIR, 'prednet_kitti_model.json')
+weights_file = os.path.join(WEIGHTS_DIR, 'prednet_weights.hdf5')  # where weights will be saved
+json_file = os.path.join(WEIGHTS_DIR, 'prednet_model.json')
 
 # Data files
 train_file = os.path.join(DATA_DIR, 'X_train.hkl')
@@ -66,7 +66,8 @@ model.compile(loss='mean_absolute_error', optimizer='adam')
 train_generator = SequenceGenerator(train_file, train_sources, nt, batch_size=batch_size, shuffle=True)
 val_generator = SequenceGenerator(val_file, val_sources, nt, batch_size=batch_size, N_seq=N_seq_val)
 
-lr_schedule = lambda epoch: 0.001 if epoch < 75 else 0.0001    # start with lr of 0.001 and then drop to 0.0001 after 75 epochs
+# start with lr of 0.001 and then drop to 0.0001 after 75 epochs
+lr_schedule = lambda epoch: 0.001 if epoch < 75 else 0.0001
 callbacks = [LearningRateScheduler(lr_schedule)]
 if save_model:
     if not os.path.exists(WEIGHTS_DIR): os.mkdir(WEIGHTS_DIR)

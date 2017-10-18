@@ -2,7 +2,7 @@
 # If you directly download the processed data, change to the path of the data.
 DATA_DIR = '../DATA/'
 
-# Where model weights and config will be saved if you run kitti_train.py
+# Where model weights and config will be saved if you run prednet_train.py
 # If you directly download the trained weights, change to appropriate path.
 WEIGHTS_DIR = './model_data_keras2/'
 
